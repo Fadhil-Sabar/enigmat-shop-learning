@@ -24,6 +24,10 @@ public class CustomerController {
     public List<Customer> getAll(){
         return customerService.getAll();
     }
+    @GetMapping("/{customerId}")
+    public Customer getProductById(@PathVariable("customerId") String id){
+        return customerService.getById(id);
+    }
 
     @PutMapping("/update")
     public Customer update(@RequestBody Customer customer){
