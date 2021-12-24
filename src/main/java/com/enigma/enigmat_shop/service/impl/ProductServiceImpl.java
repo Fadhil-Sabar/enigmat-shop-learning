@@ -1,11 +1,15 @@
 package com.enigma.enigmat_shop.service.impl;
 
+import com.enigma.enigmat_shop.dto.ProductDTO;
 import com.enigma.enigmat_shop.entity.Product;
+import com.enigma.enigmat_shop.exception.NotFoundException;
 import com.enigma.enigmat_shop.repository.ProductRepository;
 import com.enigma.enigmat_shop.service.ProductService;
+import com.enigma.enigmat_shop.specification.ProductSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
         if(product.isPresent()){
             return product.get();
         }else{
-             throw new RuntimeException(String.format("Product dengan id %s tidak ditemukan", id));
+             throw new NotFoundException(String.format("Product with id %s is not found", id));
         }
     }
 
@@ -56,6 +60,12 @@ public class ProductServiceImpl implements ProductService {
 
         // baru deh di update
         return productRepository.save(product);
+    }
+
+    @Override
+    public Page<Product> listWithPage(Pageable pageable, ProductDTO productDTO) {
+        Specification<Product> specification = ProductSpecification.getSpecification(productDTO);
+        return productRepository.findAll(specification, pageable);
     }
 
 }

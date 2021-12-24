@@ -1,9 +1,15 @@
 package com.enigma.enigmat_shop.service.impl;
 
+import com.enigma.enigmat_shop.dto.CustomerDTO;
 import com.enigma.enigmat_shop.entity.Customer;
+import com.enigma.enigmat_shop.exception.NotFoundException;
 import com.enigma.enigmat_shop.repository.CustomerRepository;
 import com.enigma.enigmat_shop.service.CustomerService;
+import com.enigma.enigmat_shop.specification.CustomerSpesification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer.isPresent()){
             return customer.get();
         }else{
-            throw new NoSuchElementException(String.format("Customer dengan id %s tidak ditemukan", id));
+            throw new NotFoundException(String.format("Customer dengan id %s tidak ditemukan", id));
         }
     }
 
@@ -46,5 +52,11 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer update(Customer customer) {
         getById(customer.getId());
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public Page<Customer> listWithPage(Pageable pageable , CustomerDTO customerDTO) {
+        Specification<Customer> specification = CustomerSpesification.getSpecification(customerDTO);
+        return customerRepository.findAll(specification, pageable);
     }
 }

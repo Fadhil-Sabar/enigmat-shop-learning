@@ -41,6 +41,17 @@ public class Customer {
     @LastModifiedDate
     private Date updatedAt;
 
+    public Customer(String id, String name, String address, String phoneNumber, Date birthDate, Boolean status, Date createdAt, Date updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.birthDate = birthDate;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     @PrePersist
     private void createdDate(){
         if(this.createdAt == null) this.createdAt = new Date();
