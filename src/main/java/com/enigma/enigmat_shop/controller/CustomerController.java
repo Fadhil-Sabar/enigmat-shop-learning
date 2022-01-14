@@ -5,12 +5,15 @@ import com.enigma.enigmat_shop.dto.CustomerDTO;
 import com.enigma.enigmat_shop.entity.Customer;
 import com.enigma.enigmat_shop.service.CustomerService;
 import com.enigma.enigmat_shop.util.WebResponse;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +22,7 @@ public class CustomerController {
 
     @Autowired
     CustomerService customerService;
+
 
     @PostMapping("/insert")
     public ResponseEntity<WebResponse<Customer>> insert(@RequestBody Customer customer){
@@ -34,6 +38,10 @@ public class CustomerController {
 //    }
 
     @GetMapping
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization token",
+                    required = true, dataType = "string", paramType = "header")
+    })
     public ResponseEntity<WebResponse<Page<Customer>>>  findAllWithPage(
             @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name = "page", defaultValue = "0") Integer page,

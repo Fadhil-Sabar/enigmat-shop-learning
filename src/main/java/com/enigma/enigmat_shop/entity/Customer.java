@@ -34,6 +34,8 @@ public class Customer {
     @Column(nullable = false)
     private Boolean status;
 
+    private Boolean isDeleted;
+
     @CreatedDate
     @Column(updatable = false)
     private Date createdAt;
@@ -48,6 +50,7 @@ public class Customer {
         this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
         this.status = status;
+        this.isDeleted = false;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -64,6 +67,14 @@ public class Customer {
     }
 
     public Customer() {
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public String getId() {
